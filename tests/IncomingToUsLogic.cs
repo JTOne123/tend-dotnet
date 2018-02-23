@@ -31,75 +31,49 @@ namespace NUnit.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class HeaderLogicTest
+	public class IncomingToUsLogicTest
 	{
-		static HeaderLogic SetupLogic()
+		static IncomingLogic SetupLogic()
 		{
-			var logic = new HeaderLogic();
+			var logic = new IncomingLogic();
 
 			return logic;
-		}
-
-		static Header SetupHeader(byte sequence, uint mask)
-		{
-			var sequenceId = new SequenceId(sequence);
-			var bitMask = new ReceiveMask(mask);
-			var header = new Header(sequenceId, bitMask);
-
-			return header;
 		}
 
 		[Test]
 		public static void FirstReceive()
 		{
 			var l = SetupLogic();
-			var h = SetupHeader(0, 0);
 
-			l.ReceivedByRemote(h);
+			l.ReceivedToUs(new SequenceId(1));
+			var h = l.ReceivedHeader;
 
-			Assert.That(l.Count, Is.EqualTo(1) );
-			Assert.That(l.Dequeue(), Is.EqualTo(false) );
+			Assert.That(h.ReceivedBits.Bits, Is.EqualTo(1));
 		}
 
 		[Test]
-		public static void DroppedReceive()
+		public static void ReceivedDroppedReceived()
 		{
 			var l = SetupLogic();
-			var h = SetupHeader(2, 0xffffffff);
 
-			l.ReceivedByRemote(h);
+			l.ReceivedToUs(new SequenceId(0));
+			var h = l.ReceivedHeader;
+			Assert.That(h.ReceivedBits.Bits, Is.EqualTo(1));
 
-			Assert.That(l.Count, Is.EqualTo(3) );
-			Assert.That(l.Dequeue(), Is.EqualTo(true) );
-			Assert.That(l.Dequeue(), Is.EqualTo(true) );
-			Assert.That(l.Dequeue(), Is.EqualTo(true) );
+			l.ReceivedToUs(new SequenceId(2));
+			var h2 = l.ReceivedHeader;
+			Assert.That(h2.ReceivedBits.Bits, Is.EqualTo(5));
 		}
 
 		[Test]
-		public static void NoNewInfo()
+		public static void IllegalDistance()
 		{
 			var l = SetupLogic();
-			var h = SetupHeader(SequenceId.MaxValue, 0xffffffff);
+			var h = l.ReceivedHeader;
 
-			Assert.Throws<UnorderedPacketException>(
-				() => l.ReceivedByRemote(h));
-
-			Assert.That(l.Count, Is.EqualTo(0) );
-		}
-
-		[Test]
-		public static void SomeDropped()
-		{
-			var l = SetupLogic();
-			var h = SetupHeader(3, 0x2);
-
-			l.ReceivedByRemote(h);
-
-			Assert.That(l.Count, Is.EqualTo(4) );
-			Assert.That(l.Dequeue(), Is.EqualTo(false) );
-			Assert.That(l.Dequeue(), Is.EqualTo(true) );
-			Assert.That(l.Dequeue(), Is.EqualTo(false) );
-			Assert.That(l.Dequeue(), Is.EqualTo(false) );
+			Assert.That(h.SequenceId, Is.EqualTo(SequenceId.Max));
+			Assert.That(h.ReceivedBits.Bits, Is.EqualTo(0));
+			Assert.Throws<Exception>(() => l.ReceivedToUs(new SequenceId(32)));
 		}
 	}
 }

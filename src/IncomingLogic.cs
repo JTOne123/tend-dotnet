@@ -27,56 +27,50 @@ using System;
 
 namespace Piot.Tend.Client
 {
-	public class SequenceId
+	public class IncomingLogic
 	{
-		byte id;
+		SequenceId lastReceivedToUs = SequenceId.Max;
+		uint receiveMask;
 
-		const byte maxRange = 128;
-		public const byte MaxValue = 127;
-
-		public static SequenceId Max = new SequenceId(MaxValue);
-
-		public SequenceId(byte id)
+		public void ReceivedToUs(SequenceId nextId)
 		{
-			if (!IsValid(id))
+			if (!lastReceivedToUs.IsValidSuccessor(nextId))
 			{
-				throw new Exception("Illegal SequenceID:" + id);
+				throw new UnorderedPacketException("Unordered packets. Duplicates and old packets should be filtered in other layers.");
 			}
-			this.id = id;
+
+			var distance = lastReceivedToUs.Distance(nextId);
+
+			if (distance == 0)
+			{
+				throw new Exception("Distance should not be zero");
+			}
+
+			if (distance > 31)
+			{
+				throw new Exception("too big gap in sequence." + distance);
+			}
+
+			for (var i = 0; i < distance - 1; ++i)
+			{
+				Append(false);
+			}
+			Append(true);
+			lastReceivedToUs = nextId;
 		}
 
-		public byte Value
+		public Header ReceivedHeader
 		{
 			get
 			{
-				return id;
+				return new Header(lastReceivedToUs, new ReceiveMask(receiveMask));
 			}
 		}
 
-		static bool IsValid(byte id)
+		void Append(bool bit)
 		{
-			return id < maxRange;
-		}
-
-		public int Distance(SequenceId otherId)
-		{
-			var nextValue = (int) otherId.id;
-			var idValue = (int) id;
-
-			if (nextValue < idValue)
-			{
-				nextValue += maxRange;
-			}
-			var diff = nextValue - idValue;
-
-			return diff;
-		}
-
-		public bool IsValidSuccessor(SequenceId nextId)
-		{
-			var distance = Distance(nextId);
-
-			return (distance != 0) && (distance < (maxRange/ 2));
+			receiveMask <<= 1;
+			receiveMask |= bit ? (uint)0x1 : (uint)0x0;
 		}
 	}
 }
