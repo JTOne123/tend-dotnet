@@ -32,6 +32,9 @@ namespace Piot.Tend.Client
 		byte id;
 
 		const byte maxRange = 64;
+		public const byte MaxValue = 63;
+
+		public static SequenceId Max = new SequenceId(MaxValue);
 
 		public SequenceId(byte id)
 		{
@@ -67,6 +70,13 @@ namespace Piot.Tend.Client
 			var diff = nextValue - idValue;
 
 			return diff;
+		}
+
+		public bool IsValidSuccessor(SequenceId nextId)
+		{
+			var distance = Distance(nextId);
+
+			return (distance != 0) && (distance < (maxRange/ 2));
 		}
 	}
 }

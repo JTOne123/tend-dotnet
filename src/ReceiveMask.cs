@@ -33,5 +33,13 @@ namespace Piot.Tend.Client
 		{
 			this.mask = mask;
 		}
+
+		public uint Bits
+		{
+			get
+			{
+				return mask;
+			}
+		}
 	}
 }

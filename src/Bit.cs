@@ -23,32 +23,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+using System;
+
 namespace Piot.Tend.Client
 {
-	public class Header
+	public class Bit
 	{
-		SequenceId sequenceId;
-		ReceiveMask receiveMask;
+		bool on;
 
-		public Header(SequenceId sequenceId, ReceiveMask receiveMask)
+		public Bit(bool on)
 		{
-			this.sequenceId = sequenceId;
-			this.receiveMask = receiveMask;
+			this.on = on;
 		}
 
-		public SequenceId SequenceId
+		public bool IsOn
 		{
 			get
 			{
-				return sequenceId;
-			}
-		}
-
-		public ReceiveMask ReceivedBits
-		{
-			get
-			{
-				return receiveMask;
+				return on;
 			}
 		}
 	}

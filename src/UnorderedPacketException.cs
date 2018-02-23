@@ -23,33 +23,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+using System;
+
 namespace Piot.Tend.Client
 {
-	public class Header
+	public class UnorderedPacketException : Exception
 	{
-		SequenceId sequenceId;
-		ReceiveMask receiveMask;
-
-		public Header(SequenceId sequenceId, ReceiveMask receiveMask)
+		public UnorderedPacketException()
 		{
-			this.sequenceId = sequenceId;
-			this.receiveMask = receiveMask;
 		}
 
-		public SequenceId SequenceId
+		public UnorderedPacketException(string message)
+			: base(message)
 		{
-			get
-			{
-				return sequenceId;
-			}
 		}
 
-		public ReceiveMask ReceivedBits
+		public UnorderedPacketException(string message, Exception inner)
+			: base(message, inner)
 		{
-			get
-			{
-				return receiveMask;
-			}
 		}
 	}
 }

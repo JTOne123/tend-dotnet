@@ -23,33 +23,56 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+using System;
+using System.Collections.Generic;
+
 namespace Piot.Tend.Client
 {
-	public class Header
+	public class HeaderLogic
 	{
-		SequenceId sequenceId;
-		ReceiveMask receiveMask;
+		SequenceId lastReceivedByRemoteSequenceId = SequenceId.Max;
+		Queue<bool> receivedQueue = new Queue<bool>();
 
-		public Header(SequenceId sequenceId, ReceiveMask receiveMask)
+		public void ReceivedByRemote(Header header)
 		{
-			this.sequenceId = sequenceId;
-			this.receiveMask = receiveMask;
-		}
+			var nextId = header.SequenceId;
 
-		public SequenceId SequenceId
-		{
-			get
+			if (!lastReceivedByRemoteSequenceId.IsValidSuccessor(nextId))
 			{
-				return sequenceId;
+				throw new UnorderedPacketException("Unordered packets. Duplicates and old packets should be filtered in other layers.");
+			}
+
+			var distance = lastReceivedByRemoteSequenceId.Distance(nextId);
+
+			if (distance == 0)
+			{
+				throw new Exception("Distance should not be zero");
+			}
+
+			var bits = new MutableReceiveMask(header.ReceivedBits, distance);
+			for (var i=0; i<distance; ++i)
+			{
+				var wasReceived = bits.ReadNextBit();
+				Append(wasReceived.IsOn);
 			}
 		}
 
-		public ReceiveMask ReceivedBits
+		public int Count
 		{
 			get
 			{
-				return receiveMask;
+				return receivedQueue.Count;
 			}
+		}
+
+		public bool Dequeue()
+		{
+			return receivedQueue.Dequeue();
+		}
+
+		void Append(bool bit)
+		{
+			receivedQueue.Enqueue(bit);
 		}
 	}
 }

@@ -23,33 +23,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+using System;
+
 namespace Piot.Tend.Client
 {
-	public class Header
+	public class MutableReceiveMask
 	{
-		SequenceId sequenceId;
-		ReceiveMask receiveMask;
+		uint mask;
+		int validBitCount;
 
-		public Header(SequenceId sequenceId, ReceiveMask receiveMask)
+		public MutableReceiveMask(ReceiveMask receiveBits, int validBits)
 		{
-			this.sequenceId = sequenceId;
-			this.receiveMask = receiveMask;
+			mask = receiveBits.Bits;
+			validBitCount = validBits;
 		}
 
-		public SequenceId SequenceId
+		public Bit ReadNextBit()
 		{
-			get
+			if (validBitCount == 0)
 			{
-				return sequenceId;
+				throw new Exception("Reading too many bits from receive mask!");
 			}
-		}
-
-		public ReceiveMask ReceivedBits
-		{
-			get
-			{
-				return receiveMask;
-			}
+			var bit = mask & 0x01;
+			mask >>= 1;
+			validBitCount--;
+			return new Bit(bit != 0);
 		}
 	}
 }
