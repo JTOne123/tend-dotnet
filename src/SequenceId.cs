@@ -53,6 +53,13 @@ namespace Piot.Tend.Client
 			}
 		}
 
+		public SequenceId Next()
+		{
+			var nextValue = (byte)((id + 1) % maxRange);
+
+			return new SequenceId(nextValue);
+		}
+
 		static bool IsValid(byte id)
 		{
 			return id < maxRange;

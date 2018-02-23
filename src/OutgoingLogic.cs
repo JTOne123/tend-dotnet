@@ -28,7 +28,7 @@ using System.Collections.Generic;
 
 namespace Piot.Tend.Client
 {
-	public class HeaderLogic
+	public class OutgoingLogic
 	{
 		SequenceId lastReceivedByRemoteSequenceId = SequenceId.Max;
 		Queue<bool> receivedQueue = new Queue<bool>();

@@ -42,12 +42,32 @@ namespace NUnit.Tests
 		}
 
 		[Test]
+		public static void NextWrap()
+		{
+			var current = SequenceId.Max;
+			var next = current.Next();
+
+			Assert.That(current.Value, Is.EqualTo(SequenceId.MaxValue));
+			Assert.That(next.Value, Is.EqualTo(0) );
+		}
+
+		[Test]
+		public static void NormalNext()
+		{
+			var current = new SequenceId(12);
+			var next = current.Next();
+
+			Assert.That(current.Value, Is.EqualTo(12) );
+			Assert.That(next.Value, Is.EqualTo(13) );
+		}
+
+		[Test]
 		public static void DistanceWrap()
 		{
 			var current = SequenceId.Max;
 			var next = new SequenceId(0);
 
-			Assert.That(current.Distance(next), Is.EqualTo(1) );
+			Assert.That(current.Distance(next), Is.EqualTo(1));
 		}
 
 		[Test]
@@ -56,7 +76,7 @@ namespace NUnit.Tests
 			var current = new SequenceId(0);
 			var next = new SequenceId(10);
 
-			Assert.That(current.Distance(next), Is.EqualTo(10) );
+			Assert.That(current.Distance(next), Is.EqualTo(10));
 		}
 
 		[Test]
@@ -65,7 +85,7 @@ namespace NUnit.Tests
 			var current = new SequenceId(10);
 			var next = new SequenceId(9);
 
-			Assert.That(current.Distance(next), Is.EqualTo(SequenceId.MaxValue) );
+			Assert.That(current.Distance(next), Is.EqualTo(SequenceId.MaxValue));
 		}
 
 		[Test]
@@ -74,7 +94,7 @@ namespace NUnit.Tests
 			var current = new SequenceId(10);
 			var next =  SequenceId.Max;
 
-			Assert.That(current.Distance(next), Is.EqualTo(SequenceId.MaxValue - 10) );
+			Assert.That(current.Distance(next), Is.EqualTo(SequenceId.MaxValue - 10));
 		}
 
 		[Test]

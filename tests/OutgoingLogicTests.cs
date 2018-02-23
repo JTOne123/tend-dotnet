@@ -31,11 +31,11 @@ namespace NUnit.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class HeaderLogicTest
+	public class OutgoingLogicTest
 	{
-		static HeaderLogic SetupLogic()
+		static OutgoingLogic SetupLogic()
 		{
-			var logic = new HeaderLogic();
+			var logic = new OutgoingLogic();
 
 			return logic;
 		}
@@ -57,8 +57,8 @@ namespace NUnit.Tests
 
 			l.ReceivedByRemote(h);
 
-			Assert.That(l.Count, Is.EqualTo(1) );
-			Assert.That(l.Dequeue(), Is.EqualTo(false) );
+			Assert.That(l.Count, Is.EqualTo(1));
+			Assert.That(l.Dequeue(), Is.EqualTo(false));
 		}
 
 		[Test]
@@ -69,10 +69,10 @@ namespace NUnit.Tests
 
 			l.ReceivedByRemote(h);
 
-			Assert.That(l.Count, Is.EqualTo(3) );
-			Assert.That(l.Dequeue(), Is.EqualTo(true) );
-			Assert.That(l.Dequeue(), Is.EqualTo(true) );
-			Assert.That(l.Dequeue(), Is.EqualTo(true) );
+			Assert.That(l.Count, Is.EqualTo(3));
+			Assert.That(l.Dequeue(), Is.EqualTo(true));
+			Assert.That(l.Dequeue(), Is.EqualTo(true));
+			Assert.That(l.Dequeue(), Is.EqualTo(true));
 		}
 
 		[Test]
@@ -84,7 +84,7 @@ namespace NUnit.Tests
 			Assert.Throws<UnorderedPacketException>(
 				() => l.ReceivedByRemote(h));
 
-			Assert.That(l.Count, Is.EqualTo(0) );
+			Assert.That(l.Count, Is.EqualTo(0));
 		}
 
 		[Test]
@@ -95,11 +95,11 @@ namespace NUnit.Tests
 
 			l.ReceivedByRemote(h);
 
-			Assert.That(l.Count, Is.EqualTo(4) );
-			Assert.That(l.Dequeue(), Is.EqualTo(false) );
-			Assert.That(l.Dequeue(), Is.EqualTo(true) );
-			Assert.That(l.Dequeue(), Is.EqualTo(false) );
-			Assert.That(l.Dequeue(), Is.EqualTo(false) );
+			Assert.That(l.Count, Is.EqualTo(4));
+			Assert.That(l.Dequeue(), Is.EqualTo(false));
+			Assert.That(l.Dequeue(), Is.EqualTo(true));
+			Assert.That(l.Dequeue(), Is.EqualTo(false));
+			Assert.That(l.Dequeue(), Is.EqualTo(false));
 		}
 	}
 }
