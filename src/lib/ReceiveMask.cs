@@ -27,7 +27,7 @@ namespace Piot.Tend.Client
 {
 	public class ReceiveMask
 	{
-		uint mask;
+		readonly uint mask;
 
 		public const int Range = 32;
 

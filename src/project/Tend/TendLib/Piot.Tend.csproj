@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <BaseDirectory>..\..\..\lib</BaseDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\lib\Bit.cs" />
+    <Compile Include="..\..\..\lib\Header.cs" />
+    <Compile Include="..\..\..\lib\IncomingLogic.cs" />
+    <Compile Include="..\..\..\lib\MutableReceiveMask.cs" />
+    <Compile Include="..\..\..\lib\OutgoingLogic.cs" />
+    <Compile Include="..\..\..\lib\ReceiveMask.cs" />
+    <Compile Include="..\..\..\lib\SequenceId.cs" />
+    <Compile Include="..\..\..\lib\UnorderedPacketException.cs" />
+  </ItemGroup>
+</Project>

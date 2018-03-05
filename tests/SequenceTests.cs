@@ -38,7 +38,7 @@ namespace NUnit.Tests
 		{
 			var s = new SequenceId(0);
 
-			Assert.That(s.Value, Is.EqualTo(0) );
+			Assert.That(s.Value, Is.EqualTo(0));
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace NUnit.Tests
 			var next = current.Next();
 
 			Assert.That(current.Value, Is.EqualTo(SequenceId.MaxValue));
-			Assert.That(next.Value, Is.EqualTo(0) );
+			Assert.That(next.Value, Is.EqualTo(0));
 		}
 
 		[Test]
@@ -57,8 +57,8 @@ namespace NUnit.Tests
 			var current = new SequenceId(12);
 			var next = current.Next();
 
-			Assert.That(current.Value, Is.EqualTo(12) );
-			Assert.That(next.Value, Is.EqualTo(13) );
+			Assert.That(current.Value, Is.EqualTo(12));
+			Assert.That(next.Value, Is.EqualTo(13));
 		}
 
 		[Test]
@@ -103,7 +103,7 @@ namespace NUnit.Tests
 			var current = new SequenceId(10);
 			var next = new SequenceId(10);
 
-			Assert.That(current.Distance(next), Is.EqualTo(0) );
+			Assert.That(current.Distance(next), Is.EqualTo(0));
 		}
 
 		[Test]
