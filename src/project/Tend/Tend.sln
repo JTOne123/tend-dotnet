@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piot.Tend", "TendLib\Piot.Tend.csproj", "{872C4950-2AFB-488B-83AF-04E3855C7FDC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{B76828DC-65D7-426D-8334-BF5DD4EDB365}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,5 +15,9 @@ Global
 		{872C4950-2AFB-488B-83AF-04E3855C7FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{872C4950-2AFB-488B-83AF-04E3855C7FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{872C4950-2AFB-488B-83AF-04E3855C7FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B76828DC-65D7-426D-8334-BF5DD4EDB365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B76828DC-65D7-426D-8334-BF5DD4EDB365}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B76828DC-65D7-426D-8334-BF5DD4EDB365}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B76828DC-65D7-426D-8334-BF5DD4EDB365}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

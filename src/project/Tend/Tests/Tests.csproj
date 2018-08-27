@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TendLib\Piot.Tend.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="UnitTest1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\tests\IncomingToUsLogic.cs">
+      <Link>IncomingToUsLogic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\tests\OutgoingLogicTests.cs">
+      <Link>OutgoingLogicTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\tests\SequenceTests.cs">
+      <Link>SequenceTests.cs</Link>
+    </Compile>
+  </ItemGroup>
+</Project>

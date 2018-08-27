@@ -23,90 +23,89 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+using System;
 using Piot.Tend.Client;
+using Xunit;
 
-namespace NUnit.Tests
+namespace Tests
 {
-	using System;
-	using NUnit.Framework;
 
-	[TestFixture]
-	public class SequenceTest
+	public static class SequenceTest
 	{
-		[Test]
+		[Fact]
 		public static void Setting()
 		{
 			var s = new SequenceId(0);
 
-			Assert.That(s.Value, Is.EqualTo(0));
+			Assert.Equal(0, s.Value);
 		}
 
-		[Test]
+		[Fact]
 		public static void NextWrap()
 		{
 			var current = SequenceId.Max;
 			var next = current.Next();
 
-			Assert.That(current.Value, Is.EqualTo(SequenceId.MaxValue));
-			Assert.That(next.Value, Is.EqualTo(0));
+			Assert.Equal(SequenceId.MaxValue, current.Value);
+			Assert.Equal(0, next.Value);
 		}
 
-		[Test]
+		[Fact]
 		public static void NormalNext()
 		{
 			var current = new SequenceId(12);
 			var next = current.Next();
 
-			Assert.That(current.Value, Is.EqualTo(12));
-			Assert.That(next.Value, Is.EqualTo(13));
+			Assert.Equal(12, current.Value);
+			Assert.Equal(13, next.Value);
 		}
 
-		[Test]
+		[Fact]
 		public static void DistanceWrap()
 		{
 			var current = SequenceId.Max;
 			var next = new SequenceId(0);
 
-			Assert.That(current.Distance(next), Is.EqualTo(1));
+			Assert.Equal(1, current.Distance(next));
 		}
 
-		[Test]
+		[Fact]
 		public static void DistanceNormal()
 		{
 			var current = new SequenceId(0);
 			var next = new SequenceId(10);
 
-			Assert.That(current.Distance(next), Is.EqualTo(10));
+			Assert.Equal(10, current.Distance(next));
 		}
 
-		[Test]
+		[Fact]
 		public static void DistancePassed()
 		{
 			var current = new SequenceId(10);
 			var next = new SequenceId(9);
 
-			Assert.That(current.Distance(next), Is.EqualTo(SequenceId.MaxValue));
+			Assert.Equal(SequenceId.MaxValue, current.Distance(next));
 		}
 
-		[Test]
+		[Fact]
 		public static void DistancePassedAgain()
 		{
 			var current = new SequenceId(10);
 			var next =  SequenceId.Max;
 
-			Assert.That(current.Distance(next), Is.EqualTo(SequenceId.MaxValue - 10));
+			Assert.Equal(SequenceId.MaxValue - 10, current.Distance(next));
 		}
 
-		[Test]
+		[Fact]
 		public static void DistanceSame()
 		{
 			var current = new SequenceId(10);
 			var next = new SequenceId(10);
 
-			Assert.That(current.Distance(next), Is.EqualTo(0));
+			Assert.Equal(0, current.Distance(next));
 		}
 
-		[Test]
+		[Fact]
 		public static void IllegalValue()
 		{
 			Assert.Throws<Exception>(() => new SequenceId(SequenceId.MaxValue + 11));

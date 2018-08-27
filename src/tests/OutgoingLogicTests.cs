@@ -25,55 +25,80 @@ SOFTWARE.
 */
 using Piot.Tend.Client;
 
-namespace NUnit.Tests
-{
-	using System;
-	using NUnit.Framework;
+using Xunit;
 
-	[TestFixture]
-	public class IncomingToUsLogicTest
+namespace Tests
+{
+
+	public static class OutgoingLogicTest
 	{
-		static IncomingLogic SetupLogic()
+		static OutgoingLogic SetupLogic()
 		{
-			var logic = new IncomingLogic();
+			var logic = new OutgoingLogic();
 
 			return logic;
 		}
 
-		[Test]
+		static Header SetupHeader(byte sequence, uint mask)
+		{
+			var sequenceId = new SequenceId(sequence);
+			var bitMask = new ReceiveMask(mask);
+			var header = new Header(sequenceId, bitMask);
+
+			return header;
+		}
+
+		[Fact]
 		public static void FirstReceive()
 		{
 			var l = SetupLogic();
+			var h = SetupHeader(0, 0);
 
-			l.ReceivedToUs(new SequenceId(1));
-			var h = l.ReceivedHeader;
+			l.ReceivedByRemote(h);
 
-			Assert.That(h.ReceivedBits.Bits, Is.EqualTo(1));
+			Assert.Equal(1, l.Count);
+			Assert.False(l.Dequeue());
 		}
 
-		[Test]
-		public static void ReceivedDroppedReceived()
+		[Fact]
+		public static void DroppedReceive()
 		{
 			var l = SetupLogic();
+			var h = SetupHeader(2, 0xffffffff);
 
-			l.ReceivedToUs(new SequenceId(0));
-			var h = l.ReceivedHeader;
-			Assert.That(h.ReceivedBits.Bits, Is.EqualTo(1));
+			l.ReceivedByRemote(h);
 
-			l.ReceivedToUs(new SequenceId(2));
-			var h2 = l.ReceivedHeader;
-			Assert.That(h2.ReceivedBits.Bits, Is.EqualTo(5));
+			Assert.Equal(3, l.Count);
+			Assert.True(l.Dequeue());
+			Assert.True( l.Dequeue());
+			Assert.True(l.Dequeue());
 		}
 
-		[Test]
-		public static void IllegalDistance()
+		[Fact]
+		public static void NoNewInfo()
 		{
 			var l = SetupLogic();
-			var h = l.ReceivedHeader;
+			var h = SetupHeader(SequenceId.MaxValue, 0xffffffff);
 
-			Assert.That(h.SequenceId, Is.EqualTo(SequenceId.Max));
-			Assert.That(h.ReceivedBits.Bits, Is.EqualTo(0));
-			Assert.Throws<Exception>(() => l.ReceivedToUs(new SequenceId(32)));
+			Assert.Throws<UnorderedPacketException>(
+				() => l.ReceivedByRemote(h));
+
+			Assert.Equal(0, l.Count);
+		}
+
+		[Fact]
+		public static void SomeDropped()
+		{
+			var l = SetupLogic();
+			var h = SetupHeader(3, 0x2);
+
+			l.ReceivedByRemote(h);
+
+			Assert.Equal(4, l.Count);
+			Assert.False(l.Dequeue());
+			Assert.True( l.Dequeue());
+			Assert.False( l.Dequeue());
+			Assert.False(l.Dequeue());
 		}
 	}
 }
