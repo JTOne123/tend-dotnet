@@ -32,6 +32,7 @@ namespace Piot.Tend.Client
 	{
 		SequenceId lastReceivedByRemoteSequenceId = SequenceId.Max;
 		readonly Queue<bool> receivedQueue = new Queue<bool>();
+		SequenceId outgoingSequenceId = SequenceId.Max;
 
 		public void ReceivedByRemote(Header header)
 		{
@@ -54,6 +55,34 @@ namespace Piot.Tend.Client
 			{
 				var wasReceived = bits.ReadNextBit();
 				Append(wasReceived.IsOn);
+			}
+			lastReceivedByRemoteSequenceId = nextId;
+		}
+
+		public bool CanIncrementOutgoingSequence
+		{
+			get
+			{
+				return lastReceivedByRemoteSequenceId.Distance(outgoingSequenceId) < ReceiveMask.Range;
+			}
+		}
+
+		public SequenceId IncreaseOutgoingSequenceId()
+		{
+			if (!CanIncrementOutgoingSequence)
+			{
+				throw new Exception("Can not increase sequence ID. Range:" + outgoingSequenceId.Distance(lastReceivedByRemoteSequenceId) + " id:" + outgoingSequenceId);
+			}
+			outgoingSequenceId = outgoingSequenceId.Next();
+
+			return outgoingSequenceId;
+		}
+
+		public SequenceId OutgoingSequenceId
+		{
+			get
+			{
+				return outgoingSequenceId;
 			}
 		}
 

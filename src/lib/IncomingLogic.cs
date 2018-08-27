@@ -46,7 +46,7 @@ namespace Piot.Tend.Client
 				throw new Exception("Distance should not be zero");
 			}
 
-			if (distance > (ReceiveMask.Range - 1))
+			if (distance > ReceiveMask.Range)
 			{
 				throw new Exception("too big gap in sequence." + distance);
 			}

@@ -30,7 +30,6 @@ namespace Tests
 {
 	using System;
 
-
 	public static class IncomingToUsLogicTest
 	{
 		static IncomingLogic SetupLogic()
@@ -74,6 +73,19 @@ namespace Tests
 			Assert.Equal(SequenceId.Max, h.SequenceId);
 			Assert.Equal(0u, h.ReceivedBits.Bits);
 			Assert.Throws<Exception>(() => l.ReceivedToUs(new SequenceId(32)));
+		}
+
+		[Fact]
+		public static void MaximumDistance()
+		{
+			var l = SetupLogic();
+			var h = l.ReceivedHeader;
+
+			Assert.Equal(0u, h.ReceivedBits.Bits);
+			Assert.Equal(SequenceId.Max, h.SequenceId);
+			l.ReceivedToUs(new SequenceId(0));
+			l.ReceivedToUs(new SequenceId(1));
+			l.ReceivedToUs(new SequenceId(33));
 		}
 	}
 }

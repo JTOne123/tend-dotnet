@@ -29,7 +29,6 @@ using Xunit;
 
 namespace Tests
 {
-
 	public static class OutgoingLogicTest
 	{
 		static OutgoingLogic SetupLogic()
@@ -70,8 +69,54 @@ namespace Tests
 
 			Assert.Equal(3, l.Count);
 			Assert.True(l.Dequeue());
-			Assert.True( l.Dequeue());
 			Assert.True(l.Dequeue());
+			Assert.True(l.Dequeue());
+		}
+
+		[Fact]
+		public static void MultipleReceive()
+		{
+			var l = SetupLogic();
+
+			var h = SetupHeader(2, 0xffffffff);
+
+			l.ReceivedByRemote(h);
+			Assert.Equal(3, l.Count);
+
+			var h2 = SetupHeader(4, 0xffffffff);
+			l.ReceivedByRemote(h2);
+
+			Assert.Equal(5, l.Count);
+			Assert.True(l.Dequeue());
+			Assert.True(l.Dequeue());
+			Assert.True(l.Dequeue());
+			Assert.True(l.Dequeue());
+			Assert.True(l.Dequeue());
+		}
+
+		[Fact]
+		public static void CheckOutgoingSequenceId()
+		{
+			var l = SetupLogic();
+
+			for (var i = 0; i < ReceiveMask.Range; ++i)
+			{
+				l.IncreaseOutgoingSequenceId();
+			}
+
+			Assert.False(l.CanIncrementOutgoingSequence);
+
+			var h = SetupHeader(2, 0xffffffff);
+			l.ReceivedByRemote(h);
+			Assert.True(l.CanIncrementOutgoingSequence);
+			l.IncreaseOutgoingSequenceId();
+			Assert.True(l.CanIncrementOutgoingSequence);
+			l.IncreaseOutgoingSequenceId();
+			Assert.True(l.CanIncrementOutgoingSequence);
+			l.IncreaseOutgoingSequenceId();
+			Assert.False(l.CanIncrementOutgoingSequence);
+
+			Assert.Equal(3, l.Count);
 		}
 
 		[Fact]
@@ -96,8 +141,8 @@ namespace Tests
 
 			Assert.Equal(4, l.Count);
 			Assert.False(l.Dequeue());
-			Assert.True( l.Dequeue());
-			Assert.False( l.Dequeue());
+			Assert.True(l.Dequeue());
+			Assert.False(l.Dequeue());
 			Assert.False(l.Dequeue());
 		}
 	}

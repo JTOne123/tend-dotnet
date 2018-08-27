@@ -50,7 +50,10 @@ namespace Piot.Tend.Client
 			Value = id;
 		}
 
-		public byte Value { get; }
+		public byte Value
+		{
+			get;
+		}
 
 		/// <summary>
 		/// Returns the next SequenceId. Note that the value wraps around 127.
@@ -61,7 +64,6 @@ namespace Piot.Tend.Client
 
 			return new SequenceId(nextValue);
 		}
-
 
 		static bool IsValid(byte id)
 		{
@@ -93,6 +95,11 @@ namespace Piot.Tend.Client
 			var distance = Distance(nextId);
 
 			return (distance != 0) && (distance < (maxRange / 2));
+		}
+
+		public override string ToString()
+		{
+			return string.Format($"[SequenceId {Value}]");
 		}
 	}
 }

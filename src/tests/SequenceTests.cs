@@ -29,7 +29,6 @@ using Xunit;
 
 namespace Tests
 {
-
 	public static class SequenceTest
 	{
 		[Fact]

@@ -33,8 +33,14 @@ namespace Piot.Tend.Client
 			ReceivedBits = receiveMask;
 		}
 
-		public SequenceId SequenceId { get; }
+		public SequenceId SequenceId
+		{
+			get;
+		}
 
-		public ReceiveMask ReceivedBits { get; }
+		public ReceiveMask ReceivedBits
+		{
+			get;
+		}
 	}
 }
