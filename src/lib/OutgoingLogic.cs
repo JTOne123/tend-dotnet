@@ -31,7 +31,7 @@ namespace Piot.Tend.Client
 	public class OutgoingLogic
 	{
 		SequenceId lastReceivedByRemoteSequenceId = SequenceId.Max;
-		Queue<bool> receivedQueue = new Queue<bool>();
+		readonly Queue<bool> receivedQueue = new Queue<bool>();
 
 		public void ReceivedByRemote(Header header)
 		{

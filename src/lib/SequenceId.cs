@@ -27,48 +27,54 @@ using System;
 
 namespace Piot.Tend.Client
 {
+	/// <summary>
+	/// Represents an auto incrementing sequence identifier. Usually a value between 0 and 127 (7 bits). After 127 it wraps around to 0.
+	/// </summary>
 	public class SequenceId
 	{
-		byte id;
-
 		const byte maxRange = 128;
 		public const byte MaxValue = 127;
 
 		public static SequenceId Max = new SequenceId(MaxValue);
 
+		/// <summary>
+		/// Constructing a SequenceId
+		/// </summary>
+		/// <exception cref="System.Exception">Thrown when the provided id is not between 0 and 127.</exception>
 		public SequenceId(byte id)
 		{
 			if (!IsValid(id))
 			{
 				throw new Exception("Illegal SequenceID:" + id);
 			}
-			this.id = id;
+			Value = id;
 		}
 
-		public byte Value
-		{
-			get
-			{
-				return id;
-			}
-		}
+		public byte Value { get; }
 
+		/// <summary>
+		/// Returns the next SequenceId. Note that the value wraps around 127.
+		/// </summary>
 		public SequenceId Next()
 		{
-			var nextValue = (byte)((id + 1) % maxRange);
+			var nextValue = (byte)((Value + 1) % maxRange);
 
 			return new SequenceId(nextValue);
 		}
+
 
 		static bool IsValid(byte id)
 		{
 			return id < maxRange;
 		}
 
+		/// <summary>
+		/// Returns the closest distance between the otherId and this SequenceId.
+		/// </summary>
 		public int Distance(SequenceId otherId)
 		{
-			var nextValue = (int) otherId.id;
-			var idValue = (int) id;
+			var nextValue = (int) otherId.Value;
+			var idValue = (int) Value;
 
 			if (nextValue < idValue)
 			{
@@ -79,6 +85,9 @@ namespace Piot.Tend.Client
 			return diff;
 		}
 
+		/// <summary>
+		/// Checks if the nextId comes after this SequenceId.
+		/// </summary>
 		public bool IsValidSuccessor(SequenceId nextId)
 		{
 			var distance = Distance(nextId);

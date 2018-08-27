@@ -27,29 +27,14 @@ namespace Piot.Tend.Client
 {
 	public class Header
 	{
-		SequenceId sequenceId;
-		ReceiveMask receiveMask;
-
 		public Header(SequenceId sequenceId, ReceiveMask receiveMask)
 		{
-			this.sequenceId = sequenceId;
-			this.receiveMask = receiveMask;
+			SequenceId = sequenceId;
+			ReceivedBits = receiveMask;
 		}
 
-		public SequenceId SequenceId
-		{
-			get
-			{
-				return sequenceId;
-			}
-		}
+		public SequenceId SequenceId { get; }
 
-		public ReceiveMask ReceivedBits
-		{
-			get
-			{
-				return receiveMask;
-			}
-		}
+		public ReceiveMask ReceivedBits { get; }
 	}
 }
