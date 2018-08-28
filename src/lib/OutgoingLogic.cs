@@ -31,7 +31,7 @@ namespace Piot.Tend.Client
 	public class OutgoingLogic
 	{
 		SequenceId lastReceivedByRemoteSequenceId = SequenceId.Max;
-		readonly Queue<bool> receivedQueue = new Queue<bool>();
+		readonly Queue<DeliveryInfo> receivedQueue = new Queue<DeliveryInfo>();
 		SequenceId outgoingSequenceId = SequenceId.Max;
 
 		public void ReceivedByRemote(Header header)
@@ -49,12 +49,14 @@ namespace Piot.Tend.Client
 			{
 				throw new Exception("Distance should not be zero");
 			}
-
+			var receivedId = new SequenceId(lastReceivedByRemoteSequenceId.Value);
+			receivedId = receivedId.Next();
 			var bits = new MutableReceiveMask(header.ReceivedBits, distance);
 			for (var i=0; i<distance; ++i)
 			{
 				var wasReceived = bits.ReadNextBit();
-				Append(wasReceived.IsOn);
+				Append(receivedId, wasReceived.IsOn);
+				receivedId = receivedId.Next();
 			}
 			lastReceivedByRemoteSequenceId = nextId;
 		}
@@ -94,14 +96,20 @@ namespace Piot.Tend.Client
 			}
 		}
 
-		public bool Dequeue()
+		public DeliveryInfo Dequeue()
 		{
 			return receivedQueue.Dequeue();
 		}
 
-		void Append(bool bit)
+		void Append(SequenceId receivedId, bool bit)
 		{
-			receivedQueue.Enqueue(bit);
+			var info = new DeliveryInfo
+			{
+				PacketSequenceId = receivedId,
+				WasDelivered = bit
+			};
+
+			receivedQueue.Enqueue(info);
 		}
 	}
 }

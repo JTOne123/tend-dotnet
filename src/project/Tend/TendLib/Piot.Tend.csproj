@@ -14,5 +14,6 @@
     <Compile Include="..\..\..\lib\ReceiveMask.cs" />
     <Compile Include="..\..\..\lib\SequenceId.cs" />
     <Compile Include="..\..\..\lib\UnorderedPacketException.cs" />
+    <Compile Include="..\..\..\lib\DeliveryInfo.cs" />
   </ItemGroup>
 </Project>

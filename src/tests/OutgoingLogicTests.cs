@@ -56,7 +56,7 @@ namespace Tests
 			l.ReceivedByRemote(h);
 
 			Assert.Equal(1, l.Count);
-			Assert.False(l.Dequeue());
+			Assert.False(l.Dequeue().WasDelivered);
 		}
 
 		[Fact]
@@ -68,9 +68,9 @@ namespace Tests
 			l.ReceivedByRemote(h);
 
 			Assert.Equal(3, l.Count);
-			Assert.True(l.Dequeue());
-			Assert.True(l.Dequeue());
-			Assert.True(l.Dequeue());
+			Assert.True(l.Dequeue().WasDelivered);
+			Assert.True(l.Dequeue().WasDelivered);
+			Assert.True(l.Dequeue().WasDelivered);
 		}
 
 		[Fact]
@@ -87,11 +87,11 @@ namespace Tests
 			l.ReceivedByRemote(h2);
 
 			Assert.Equal(5, l.Count);
-			Assert.True(l.Dequeue());
-			Assert.True(l.Dequeue());
-			Assert.True(l.Dequeue());
-			Assert.True(l.Dequeue());
-			Assert.True(l.Dequeue());
+			Assert.True(l.Dequeue().WasDelivered);
+			Assert.True(l.Dequeue().WasDelivered);
+			Assert.True(l.Dequeue().WasDelivered);
+			Assert.True(l.Dequeue().WasDelivered);
+			Assert.True(l.Dequeue().WasDelivered);
 		}
 
 		[Fact]
@@ -140,10 +140,14 @@ namespace Tests
 			l.ReceivedByRemote(h);
 
 			Assert.Equal(4, l.Count);
-			Assert.False(l.Dequeue());
-			Assert.True(l.Dequeue());
-			Assert.False(l.Dequeue());
-			Assert.False(l.Dequeue());
+			Assert.False(l.Dequeue().WasDelivered);
+			var info = l.Dequeue();
+			Assert.True(info.WasDelivered);
+			Assert.Equal(1u, info.PacketSequenceId.Value);
+			Assert.False(l.Dequeue().WasDelivered);
+			var info2 = l.Dequeue();
+			Assert.False(info2.WasDelivered);
+			Assert.Equal(3u, info2.PacketSequenceId.Value);
 		}
 	}
 }
