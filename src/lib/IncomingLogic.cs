@@ -36,7 +36,7 @@ namespace Piot.Tend.Client
 		{
 			if (!lastReceivedToUs.IsValidSuccessor(nextId))
 			{
-				throw new UnorderedPacketException("Unordered packets. Duplicates and old packets should be filtered in other layers.");
+				throw new UnorderedPacketException("Unordered packets. Duplicates and old packets should be filtered in other layers.", lastReceivedToUs, nextId);
 			}
 
 			var distance = lastReceivedToUs.Distance(nextId);

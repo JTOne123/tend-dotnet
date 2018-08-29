@@ -33,8 +33,8 @@ namespace Piot.Tend.Client
 		{
 		}
 
-		public UnorderedPacketException(string message)
-			: base(message)
+		public UnorderedPacketException(string message, SequenceId last, SequenceId received)
+			: base($"last: {last} received:{received} msg:{message}")
 		{
 		}
 
