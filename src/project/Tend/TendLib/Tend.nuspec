@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>Tend</id>
-    <version>1.0.3</version>
+    <version>1.0.7</version>
     <authors>Piot</authors>
     <owners>Piot</owners>
     <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/Piot/tend-dotnet</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Reliable Datagram Protocol</description>
-    <releaseNotes>Outgoing Sequence numbers in Dequeue</releaseNotes>
+    <releaseNotes>Readded exceptions for incoming packages</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>datagram</tags>
     <dependencies>

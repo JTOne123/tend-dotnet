@@ -38,17 +38,17 @@ namespace Piot.Tend.Client
 		{
 			var nextId = header.SequenceId;
 
-			if (!lastReceivedByRemoteSequenceId.IsValidSuccessor(nextId))
-			{
-				throw new UnorderedPacketException("Unordered packets. Duplicates and old packets should be filtered in other layers.", lastReceivedByRemoteSequenceId, nextId);
-			}
-
 			var distance = lastReceivedByRemoteSequenceId.Distance(nextId);
-
 			if (distance == 0)
 			{
-				throw new Exception("Distance should not be zero");
+				return;
 			}
+
+			if (!lastReceivedByRemoteSequenceId.IsValidSuccessor(nextId))
+			{
+				throw new UnorderedPacketException("Outgoing Unordered packets. Duplicates and old packets should be filtered in other layers.", lastReceivedByRemoteSequenceId, nextId);
+			}
+
 			var receivedId = new SequenceId(lastReceivedByRemoteSequenceId.Value);
 			receivedId = receivedId.Next();
 			var bits = new MutableReceiveMask(header.ReceivedBits, distance);

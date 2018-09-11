@@ -40,6 +40,15 @@ namespace Tests
 		}
 
 		[Fact]
+		public static void ReceiveSamePacketAgain()
+		{
+			var l = SetupLogic();
+
+			Assert.Throws<UnorderedPacketException>(() => l.ReceivedToUs(new SequenceId(SequenceId.MaxValue)));
+
+		}
+
+		[Fact]
 		public static void FirstReceive()
 		{
 			var l = SetupLogic();

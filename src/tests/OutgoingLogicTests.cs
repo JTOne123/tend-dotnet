@@ -125,9 +125,6 @@ namespace Tests
 			var l = SetupLogic();
 			var h = SetupHeader(SequenceId.MaxValue, 0xffffffff);
 
-			Assert.Throws<UnorderedPacketException>(
-				() => l.ReceivedByRemote(h));
-
 			Assert.Equal(0, l.Count);
 		}
 
