@@ -50,7 +50,7 @@ namespace Piot.Tend.Client
 			Value = id;
 		}
 
-		public byte Value	
+		public byte Value
 		{
 			get;
 		}

@@ -39,6 +39,7 @@ namespace Piot.Tend.Client
 			var nextId = header.SequenceId;
 
 			var distance = lastReceivedByRemoteSequenceId.Distance(nextId);
+
 			if (distance == 0)
 			{
 				return;

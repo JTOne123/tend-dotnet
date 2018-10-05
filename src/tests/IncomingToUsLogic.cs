@@ -45,7 +45,6 @@ namespace Tests
 			var l = SetupLogic();
 
 			Assert.Throws<UnorderedPacketException>(() => l.ReceivedToUs(new SequenceId(SequenceId.MaxValue)));
-
 		}
 
 		[Fact]
