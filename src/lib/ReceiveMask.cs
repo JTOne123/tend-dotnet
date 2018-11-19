@@ -23,20 +23,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+using System;
+
 namespace Piot.Tend.Client
 {
-	public class ReceiveMask
-	{
-		public const int Range = 32;
 
-		public ReceiveMask(uint mask)
-		{
-			Bits = mask;
-		}
+    public class ReceiveMask
+    {
+        public const int Range = 32;
 
-		public uint Bits
-		{
-			get;
-		}
-	}
+        public ReceiveMask(uint mask)
+        {
+            Bits = mask;
+        }
+
+        public uint Bits
+        {
+            get;
+        }
+
+        public override string ToString()
+        {
+            return $"[Mask:{GetIntBinaryString(Bits)}]";
+        }
+        static string GetIntBinaryString(uint n)
+        {
+            var b = new char[32];
+
+            for (var i = 0; i < 32; i++)
+            {
+                var pos = 31 - i;
+                if ((n & (1 << i)) != 0)
+                {
+                    b[pos] = '1';
+                }
+                else
+                {
+                    b[pos] = '0';
+                }
+            }
+            return new string(b);
+        }
+    }
 }

@@ -25,22 +25,27 @@ SOFTWARE.
 */
 namespace Piot.Tend.Client
 {
-	public class Header
-	{
-		public Header(SequenceId sequenceId, ReceiveMask receiveMask)
-		{
-			SequenceId = sequenceId;
-			ReceivedBits = receiveMask;
-		}
+    public class Header
+    {
+        public Header(SequenceId sequenceId, ReceiveMask receiveMask)
+        {
+            SequenceId = sequenceId;
+            ReceivedBits = receiveMask;
+        }
 
-		public SequenceId SequenceId
-		{
-			get;
-		}
+        public SequenceId SequenceId
+        {
+            get;
+        }
 
-		public ReceiveMask ReceivedBits
-		{
-			get;
-		}
-	}
+        public ReceiveMask ReceivedBits
+        {
+            get;
+        }
+
+        public override string ToString()
+        {
+            return $"[Header: {SequenceId} {ReceivedBits}]";
+        }
+    }
 }

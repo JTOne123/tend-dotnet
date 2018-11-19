@@ -25,9 +25,14 @@ SOFTWARE.
 */
 namespace Piot.Tend.Client
 {
-	public struct DeliveryInfo
-	{
-		public bool WasDelivered;
-		public SequenceId PacketSequenceId;
-	}
+    public struct DeliveryInfo
+    {
+        public bool WasDelivered;
+        public SequenceId PacketSequenceId;
+
+        public override string ToString()
+        {
+            return $"[Delivery {PacketSequenceId} wasDelivered:{WasDelivered}]";
+        }
+    }
 }
