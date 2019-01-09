@@ -3,6 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <BaseDirectory>..\..\..\lib</BaseDirectory>
+    <PackageId>Tend</PackageId>
+    <Version>1.0.7</Version>
+    <Authors>Piot</Authors>
+    <Description>Reliable Datagram Protocol</Description>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageProjectUrl> https://github.com/piot/tend-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/piot/tend-dotnet.git</RepositoryUrl>
+    <PacketReleaseNotes>Readded exceptions for incoming packages</PacketReleaseNotes>
+    <IncludeSymbols>true</IncludeSymbols>
   </PropertyGroup>
 
   <ItemGroup>
