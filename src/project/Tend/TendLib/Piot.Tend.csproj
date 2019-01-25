@@ -1,28 +1,46 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <BaseDirectory>..\..\..\lib</BaseDirectory>
-    <PackageId>Tend</PackageId>
-    <Version>1.0.7</Version>
-    <Authors>Piot</Authors>
-    <Description>Reliable Datagram Protocol</Description>
-    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
-    <PackageProjectUrl> https://github.com/piot/tend-dotnet</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/piot/tend-dotnet.git</RepositoryUrl>
-    <PacketReleaseNotes>Readded exceptions for incoming packages</PacketReleaseNotes>
-    <IncludeSymbols>true</IncludeSymbols>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\..\lib\Bit.cs" />
-    <Compile Include="..\..\..\lib\Header.cs" />
-    <Compile Include="..\..\..\lib\IncomingLogic.cs" />
-    <Compile Include="..\..\..\lib\MutableReceiveMask.cs" />
-    <Compile Include="..\..\..\lib\OutgoingLogic.cs" />
-    <Compile Include="..\..\..\lib\ReceiveMask.cs" />
-    <Compile Include="..\..\..\lib\SequenceId.cs" />
-    <Compile Include="..\..\..\lib\UnorderedPacketException.cs" />
-    <Compile Include="..\..\..\lib\DeliveryInfo.cs" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <BaseDirectory>..\..\..\lib</BaseDirectory>
+        <PackageId>Tend</PackageId>
+        <Version>1.0.7</Version>
+        <Authors>Piot</Authors>
+        <Description>Reliable Datagram Protocol</Description>
+        <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/piot/tend-dotnet</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/piot/tend-dotnet.git</RepositoryUrl>
+        <PacketReleaseNotes>Readded exceptions for incoming packages</PacketReleaseNotes>
+        <IncludeSymbols>true</IncludeSymbols>
+        <PackageLicense>MIT</PackageLicense>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="../../../lib/Bit.cs">
+            <Link>Bit.cs</Link>
+        </Compile>
+        <Compile Include="../../../lib/DeliveryInfo.cs">
+            <Link>DeliveryInfo.cs</Link>
+        </Compile>
+        <Compile Include="../../../lib/Header.cs">
+            <Link>Header.cs</Link>
+        </Compile>
+        <Compile Include="../../../lib/IncomingLogic.cs">
+            <Link>IncomingLogic.cs</Link>
+        </Compile>
+        <Compile Include="../../../lib/MutableReceiveMask.cs">
+            <Link>MutableReceiveMask.cs</Link>
+        </Compile>
+        <Compile Include="../../../lib/OutgoingLogic.cs">
+            <Link>OutgoingLogic.cs</Link>
+        </Compile>
+        <Compile Include="../../../lib/ReceiveMask.cs">
+            <Link>ReceiveMask.cs</Link>
+        </Compile>
+        <Compile Include="../../../lib/SequenceId.cs">
+            <Link>SequenceId.cs</Link>
+        </Compile>
+        <Compile Include="../../../lib/UnorderedPacketException.cs">
+            <Link>UnorderedPacketException.cs</Link>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup></ItemGroup>
 </Project>
