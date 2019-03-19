@@ -28,89 +28,90 @@ using System.Collections.Generic;
 
 namespace Piot.Tend.Client
 {
-	public class OutgoingLogic
-	{
-		SequenceId lastReceivedByRemoteSequenceId = SequenceId.Max;
-		readonly Queue<DeliveryInfo> receivedQueue = new Queue<DeliveryInfo>();
-		SequenceId outgoingSequenceId = SequenceId.Max;
+    public class OutgoingLogic
+    {
+        SequenceId lastReceivedByRemoteSequenceId = SequenceId.Max;
+        readonly Queue<DeliveryInfo> receivedQueue = new Queue<DeliveryInfo>();
+        SequenceId outgoingSequenceId = SequenceId.Max;
 
-		public void ReceivedByRemote(Header header)
-		{
-			var nextId = header.SequenceId;
+        public bool ReceivedByRemote(Header header)
+        {
+            var nextId = header.SequenceId;
 
-			var distance = lastReceivedByRemoteSequenceId.Distance(nextId);
+            var distance = lastReceivedByRemoteSequenceId.Distance(nextId);
 
-			if (distance == 0)
-			{
-				return;
-			}
+            if (distance == 0)
+            {
+                return false;
+            }
 
-			if (!lastReceivedByRemoteSequenceId.IsValidSuccessor(nextId))
-			{
-				throw new UnorderedPacketException("Outgoing Unordered packets. Duplicates and old packets should be filtered in other layers.", lastReceivedByRemoteSequenceId, nextId);
-			}
+            if (!lastReceivedByRemoteSequenceId.IsValidSuccessor(nextId))
+            {
+                throw new UnorderedPacketException("Outgoing Unordered packets. Duplicates and old packets should be filtered in other layers.", lastReceivedByRemoteSequenceId, nextId);
+            }
 
-			var receivedId = new SequenceId(lastReceivedByRemoteSequenceId.Value);
-			receivedId = receivedId.Next();
-			var bits = new MutableReceiveMask(header.ReceivedBits, distance);
-			for (var i=0; i<distance; ++i)
-			{
-				var wasReceived = bits.ReadNextBit();
-				Append(receivedId, wasReceived.IsOn);
-				receivedId = receivedId.Next();
-			}
-			lastReceivedByRemoteSequenceId = nextId;
-		}
+            var receivedId = new SequenceId(lastReceivedByRemoteSequenceId.Value);
+            receivedId = receivedId.Next();
+            var bits = new MutableReceiveMask(header.ReceivedBits, distance);
+            for (var i = 0; i < distance; ++i)
+            {
+                var wasReceived = bits.ReadNextBit();
+                Append(receivedId, wasReceived.IsOn);
+                receivedId = receivedId.Next();
+            }
+            lastReceivedByRemoteSequenceId = nextId;
+            return true;
+        }
 
-		public bool CanIncrementOutgoingSequence
-		{
-			get
-			{
-				return lastReceivedByRemoteSequenceId.Distance(outgoingSequenceId) < ReceiveMask.Range;
-			}
-		}
+        public bool CanIncrementOutgoingSequence
+        {
+            get
+            {
+                return lastReceivedByRemoteSequenceId.Distance(outgoingSequenceId) < ReceiveMask.Range;
+            }
+        }
 
-		public SequenceId IncreaseOutgoingSequenceId()
-		{
-			if (!CanIncrementOutgoingSequence)
-			{
-				throw new Exception("Can not increase sequence ID. Range:" + outgoingSequenceId.Distance(lastReceivedByRemoteSequenceId) + " id:" + outgoingSequenceId);
-			}
-			outgoingSequenceId = outgoingSequenceId.Next();
+        public SequenceId IncreaseOutgoingSequenceId()
+        {
+            if (!CanIncrementOutgoingSequence)
+            {
+                throw new Exception("Can not increase sequence ID. Range:" + outgoingSequenceId.Distance(lastReceivedByRemoteSequenceId) + " id:" + outgoingSequenceId);
+            }
+            outgoingSequenceId = outgoingSequenceId.Next();
 
-			return outgoingSequenceId;
-		}
+            return outgoingSequenceId;
+        }
 
-		public SequenceId OutgoingSequenceId
-		{
-			get
-			{
-				return outgoingSequenceId;
-			}
-		}
+        public SequenceId OutgoingSequenceId
+        {
+            get
+            {
+                return outgoingSequenceId;
+            }
+        }
 
-		public int Count
-		{
-			get
-			{
-				return receivedQueue.Count;
-			}
-		}
+        public int Count
+        {
+            get
+            {
+                return receivedQueue.Count;
+            }
+        }
 
-		public DeliveryInfo Dequeue()
-		{
-			return receivedQueue.Dequeue();
-		}
+        public DeliveryInfo Dequeue()
+        {
+            return receivedQueue.Dequeue();
+        }
 
-		void Append(SequenceId receivedId, bool bit)
-		{
-			var info = new DeliveryInfo
-			{
-				PacketSequenceId = receivedId,
-				WasDelivered = bit
-			};
+        void Append(SequenceId receivedId, bool bit)
+        {
+            var info = new DeliveryInfo
+            {
+                PacketSequenceId = receivedId,
+                WasDelivered = bit
+            };
 
-			receivedQueue.Enqueue(info);
-		}
-	}
+            receivedQueue.Enqueue(info);
+        }
+    }
 }
