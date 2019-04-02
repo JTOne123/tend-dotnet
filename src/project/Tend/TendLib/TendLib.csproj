@@ -12,6 +12,7 @@
         <PacketReleaseNotes>Readded exceptions for incoming packages</PacketReleaseNotes>
         <IncludeSymbols>true</IncludeSymbols>
         <PackageLicense>MIT</PackageLicense>
+        <Copyright>Peter Bjorklund</Copyright>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="../../../lib/Bit.cs">
