@@ -27,50 +27,56 @@ using System;
 
 namespace Piot.Tend.Client
 {
-	public class IncomingLogic
-	{
-		SequenceId lastReceivedToUs = SequenceId.Max;
-		uint receiveMask;
+    public class IncomingLogic
+    {
+        SequenceId lastReceivedToUs = SequenceId.Max;
+        uint receiveMask;
 
-		public void ReceivedToUs(SequenceId nextId)
-		{
-			if (!lastReceivedToUs.IsValidSuccessor(nextId))
-			{
-				throw new UnorderedPacketException("Incoming Unordered packets. Duplicates and old packets should be filtered in other layers.", lastReceivedToUs, nextId);
-			}
+        public void Clear()
+        {
+            lastReceivedToUs = SequenceId.Max;
+            receiveMask = 0;
+        }
 
-			var distance = lastReceivedToUs.Distance(nextId);
+        public void ReceivedToUs(SequenceId nextId)
+        {
+            if (!lastReceivedToUs.IsValidSuccessor(nextId))
+            {
+                throw new UnorderedPacketException("Incoming Unordered packets. Duplicates and old packets should be filtered in other layers.", lastReceivedToUs, nextId);
+            }
 
-			if (distance == 0)
-			{
-				return;
-			}
+            var distance = lastReceivedToUs.Distance(nextId);
 
-			if (distance > ReceiveMask.Range)
-			{
-				throw new Exception("too big gap in sequence." + distance);
-			}
+            if (distance == 0)
+            {
+                return;
+            }
 
-			for (var i = 0; i < distance - 1; ++i)
-			{
-				Append(false);
-			}
-			Append(true);
-			lastReceivedToUs = nextId;
-		}
+            if (distance > ReceiveMask.Range)
+            {
+                throw new Exception("too big gap in sequence." + distance);
+            }
 
-		public Header ReceivedHeader
-		{
-			get
-			{
-				return new Header(lastReceivedToUs, new ReceiveMask(receiveMask));
-			}
-		}
+            for (var i = 0; i < distance - 1; ++i)
+            {
+                Append(false);
+            }
+            Append(true);
+            lastReceivedToUs = nextId;
+        }
 
-		void Append(bool bit)
-		{
-			receiveMask <<= 1;
-			receiveMask |= bit ? (uint)0x1 : (uint)0x0;
-		}
-	}
+        public Header ReceivedHeader
+        {
+            get
+            {
+                return new Header(lastReceivedToUs, new ReceiveMask(receiveMask));
+            }
+        }
+
+        void Append(bool bit)
+        {
+            receiveMask <<= 1;
+            receiveMask |= bit ? (uint)0x1 : (uint)0x0;
+        }
+    }
 }

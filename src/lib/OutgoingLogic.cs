@@ -34,6 +34,13 @@ namespace Piot.Tend.Client
         readonly Queue<DeliveryInfo> receivedQueue = new Queue<DeliveryInfo>();
         SequenceId outgoingSequenceId = SequenceId.Max;
 
+        public void Clear()
+        {
+            receivedQueue.Clear();
+            lastReceivedByRemoteSequenceId = SequenceId.Max;
+            outgoingSequenceId = SequenceId.Max;
+        }
+
         public bool ReceivedByRemote(Header header)
         {
             var nextId = header.SequenceId;

@@ -28,72 +28,72 @@ using Xunit;
 
 namespace Tests
 {
-	using System;
+    using System;
 
-	public static class IncomingToUsLogicTest
-	{
-		static IncomingLogic SetupLogic()
-		{
-			var logic = new IncomingLogic();
+    public static class IncomingToUsLogicTest
+    {
+        static IncomingLogic SetupLogic()
+        {
+            var logic = new IncomingLogic();
 
-			return logic;
-		}
+            return logic;
+        }
 
-		[Fact]
-		public static void ReceiveSamePacketAgain()
-		{
-			var l = SetupLogic();
+        [Fact]
+        public static void ReceiveSamePacketAgain()
+        {
+            var l = SetupLogic();
 
-			Assert.Throws<UnorderedPacketException>(() => l.ReceivedToUs(new SequenceId(SequenceId.MaxValue)));
-		}
+            Assert.Throws<UnorderedPacketException>(() => l.ReceivedToUs(new SequenceId(SequenceId.MaxValue)));
+        }
 
-		[Fact]
-		public static void FirstReceive()
-		{
-			var l = SetupLogic();
+        [Fact]
+        public static void FirstReceive()
+        {
+            var l = SetupLogic();
 
-			l.ReceivedToUs(new SequenceId(1));
-			var h = l.ReceivedHeader;
+            l.ReceivedToUs(new SequenceId(1));
+            var h = l.ReceivedHeader;
 
-			Assert.Equal(1u, h.ReceivedBits.Bits);
-		}
+            Assert.Equal(1u, h.ReceivedBits.Bits);
+        }
 
-		[Fact]
-		public static void ReceivedDroppedReceived()
-		{
-			var l = SetupLogic();
+        [Fact]
+        public static void ReceivedDroppedReceived()
+        {
+            var l = SetupLogic();
 
-			l.ReceivedToUs(new SequenceId(0));
-			var h = l.ReceivedHeader;
-			Assert.Equal(1u, h.ReceivedBits.Bits);
+            l.ReceivedToUs(new SequenceId(0));
+            var h = l.ReceivedHeader;
+            Assert.Equal(1u, h.ReceivedBits.Bits);
 
-			l.ReceivedToUs(new SequenceId(2));
-			var h2 = l.ReceivedHeader;
-			Assert.Equal(5u, h2.ReceivedBits.Bits);
-		}
+            l.ReceivedToUs(new SequenceId(2));
+            var h2 = l.ReceivedHeader;
+            Assert.Equal(5u, h2.ReceivedBits.Bits);
+        }
 
-		[Fact]
-		public static void IllegalDistance()
-		{
-			var l = SetupLogic();
-			var h = l.ReceivedHeader;
+        [Fact]
+        public static void IllegalDistance()
+        {
+            var l = SetupLogic();
+            var h = l.ReceivedHeader;
 
-			Assert.Equal(SequenceId.Max, h.SequenceId);
-			Assert.Equal(0u, h.ReceivedBits.Bits);
-			Assert.Throws<Exception>(() => l.ReceivedToUs(new SequenceId(32)));
-		}
+            Assert.Equal(SequenceId.Max, h.SequenceId);
+            Assert.Equal(0u, h.ReceivedBits.Bits);
+            Assert.Throws<Exception>(() => l.ReceivedToUs(new SequenceId(32)));
+        }
 
-		[Fact]
-		public static void MaximumDistance()
-		{
-			var l = SetupLogic();
-			var h = l.ReceivedHeader;
+        [Fact]
+        public static void MaximumDistance()
+        {
+            var l = SetupLogic();
+            var h = l.ReceivedHeader;
 
-			Assert.Equal(0u, h.ReceivedBits.Bits);
-			Assert.Equal(SequenceId.Max, h.SequenceId);
-			l.ReceivedToUs(new SequenceId(0));
-			l.ReceivedToUs(new SequenceId(1));
-			l.ReceivedToUs(new SequenceId(33));
-		}
-	}
+            Assert.Equal(0u, h.ReceivedBits.Bits);
+            Assert.Equal(SequenceId.Max, h.SequenceId);
+            l.ReceivedToUs(new SequenceId(0));
+            l.ReceivedToUs(new SequenceId(1));
+            l.ReceivedToUs(new SequenceId(33));
+        }
+    }
 }
