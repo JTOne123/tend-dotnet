@@ -27,27 +27,27 @@ using System;
 
 namespace Piot.Tend.Client
 {
-	public class MutableReceiveMask
-	{
-		uint mask;
-		int validBitCount;
+    public class MutableReceiveMask
+    {
+        uint mask;
+        int validBitCount;
 
-		public MutableReceiveMask(ReceiveMask receiveBits, int validBits)
-		{
-			mask = receiveBits.Bits;
-			validBitCount = validBits;
-		}
+        public MutableReceiveMask(ReceiveMask receiveBits, int validBits)
+        {
+            mask = receiveBits.Bits;
+            validBitCount = validBits;
+        }
 
-		public Bit ReadNextBit()
-		{
-			if (validBitCount == 0)
-			{
-				throw new Exception("Reading too many bits from receive mask!");
-			}
-			var bit = mask & 0x01;
-			mask >>= 1;
-			validBitCount--;
-			return new Bit(bit != 0);
-		}
-	}
+        public Bit ReadNextBit()
+        {
+            if (validBitCount == 0)
+            {
+                throw new Exception("Reading too many bits from receive mask!");
+            }
+            var bit = mask & 0x01;
+            mask >>= 1;
+            validBitCount--;
+            return new Bit(bit != 0);
+        }
+    }
 }

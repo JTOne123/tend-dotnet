@@ -25,21 +25,21 @@ SOFTWARE.
 */
 namespace Piot.Tend.Client
 {
-	public class Bit
-	{
-		bool on;
+    public class Bit
+    {
+        bool on;
 
-		public Bit(bool on)
-		{
-			this.on = on;
-		}
+        public Bit(bool on)
+        {
+            this.on = on;
+        }
 
-		public bool IsOn
-		{
-			get
-			{
-				return on;
-			}
-		}
-	}
+        public bool IsOn
+        {
+            get
+            {
+                return on;
+            }
+        }
+    }
 }

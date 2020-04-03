@@ -29,122 +29,122 @@ using Xunit;
 
 namespace Tests
 {
-	public static class OutgoingLogicTest
-	{
-		static OutgoingLogic SetupLogic()
-		{
-			var logic = new OutgoingLogic();
+    public static class OutgoingLogicTest
+    {
+        static OutgoingLogic SetupLogic()
+        {
+            var logic = new OutgoingLogic();
 
-			return logic;
-		}
+            return logic;
+        }
 
-		static Header SetupHeader(byte sequence, uint mask)
-		{
-			var sequenceId = new SequenceId(sequence);
-			var bitMask = new ReceiveMask(mask);
-			var header = new Header(sequenceId, bitMask);
+        static Header SetupHeader(byte sequence, uint mask)
+        {
+            var sequenceId = new SequenceId(sequence);
+            var bitMask = new ReceiveMask(mask);
+            var header = new Header(sequenceId, bitMask);
 
-			return header;
-		}
+            return header;
+        }
 
-		[Fact]
-		public static void FirstReceive()
-		{
-			var l = SetupLogic();
-			var h = SetupHeader(0, 0);
+        [Fact]
+        public static void FirstReceive()
+        {
+            var l = SetupLogic();
+            var h = SetupHeader(0, 0);
 
-			l.ReceivedByRemote(h);
+            l.ReceivedByRemote(h);
 
-			Assert.Equal(1, l.Count);
-			Assert.False(l.Dequeue().WasDelivered);
-		}
+            Assert.Equal(1, l.Count);
+            Assert.False(l.Dequeue().WasDelivered);
+        }
 
-		[Fact]
-		public static void DroppedReceive()
-		{
-			var l = SetupLogic();
-			var h = SetupHeader(2, 0xffffffff);
+        [Fact]
+        public static void DroppedReceive()
+        {
+            var l = SetupLogic();
+            var h = SetupHeader(2, 0xffffffff);
 
-			l.ReceivedByRemote(h);
+            l.ReceivedByRemote(h);
 
-			Assert.Equal(3, l.Count);
-			Assert.True(l.Dequeue().WasDelivered);
-			Assert.True(l.Dequeue().WasDelivered);
-			Assert.True(l.Dequeue().WasDelivered);
-		}
+            Assert.Equal(3, l.Count);
+            Assert.True(l.Dequeue().WasDelivered);
+            Assert.True(l.Dequeue().WasDelivered);
+            Assert.True(l.Dequeue().WasDelivered);
+        }
 
-		[Fact]
-		public static void MultipleReceive()
-		{
-			var l = SetupLogic();
+        [Fact]
+        public static void MultipleReceive()
+        {
+            var l = SetupLogic();
 
-			var h = SetupHeader(2, 0xffffffff);
+            var h = SetupHeader(2, 0xffffffff);
 
-			l.ReceivedByRemote(h);
-			Assert.Equal(3, l.Count);
+            l.ReceivedByRemote(h);
+            Assert.Equal(3, l.Count);
 
-			var h2 = SetupHeader(4, 0xffffffff);
-			l.ReceivedByRemote(h2);
+            var h2 = SetupHeader(4, 0xffffffff);
+            l.ReceivedByRemote(h2);
 
-			Assert.Equal(5, l.Count);
-			Assert.True(l.Dequeue().WasDelivered);
-			Assert.True(l.Dequeue().WasDelivered);
-			Assert.True(l.Dequeue().WasDelivered);
-			Assert.True(l.Dequeue().WasDelivered);
-			Assert.True(l.Dequeue().WasDelivered);
-		}
+            Assert.Equal(5, l.Count);
+            Assert.True(l.Dequeue().WasDelivered);
+            Assert.True(l.Dequeue().WasDelivered);
+            Assert.True(l.Dequeue().WasDelivered);
+            Assert.True(l.Dequeue().WasDelivered);
+            Assert.True(l.Dequeue().WasDelivered);
+        }
 
-		[Fact]
-		public static void CheckOutgoingSequenceId()
-		{
-			var l = SetupLogic();
+        [Fact]
+        public static void CheckOutgoingSequenceId()
+        {
+            var l = SetupLogic();
 
-			for (var i = 0; i < ReceiveMask.Range; ++i)
-			{
-				l.IncreaseOutgoingSequenceId();
-			}
+            for (var i = 0; i < ReceiveMask.Range; ++i)
+            {
+                l.IncreaseOutgoingSequenceId();
+            }
 
-			Assert.False(l.CanIncrementOutgoingSequence);
+            Assert.False(l.CanIncrementOutgoingSequence);
 
-			var h = SetupHeader(2, 0xffffffff);
-			l.ReceivedByRemote(h);
-			Assert.True(l.CanIncrementOutgoingSequence);
-			l.IncreaseOutgoingSequenceId();
-			Assert.True(l.CanIncrementOutgoingSequence);
-			l.IncreaseOutgoingSequenceId();
-			Assert.True(l.CanIncrementOutgoingSequence);
-			l.IncreaseOutgoingSequenceId();
-			Assert.False(l.CanIncrementOutgoingSequence);
+            var h = SetupHeader(2, 0xffffffff);
+            l.ReceivedByRemote(h);
+            Assert.True(l.CanIncrementOutgoingSequence);
+            l.IncreaseOutgoingSequenceId();
+            Assert.True(l.CanIncrementOutgoingSequence);
+            l.IncreaseOutgoingSequenceId();
+            Assert.True(l.CanIncrementOutgoingSequence);
+            l.IncreaseOutgoingSequenceId();
+            Assert.False(l.CanIncrementOutgoingSequence);
 
-			Assert.Equal(3, l.Count);
-		}
+            Assert.Equal(3, l.Count);
+        }
 
-		[Fact]
-		public static void NoNewInfo()
-		{
-			var l = SetupLogic();
-			var h = SetupHeader(SequenceId.MaxValue, 0xffffffff);
+        [Fact]
+        public static void NoNewInfo()
+        {
+            var l = SetupLogic();
+            var h = SetupHeader(SequenceId.MaxValue, 0xffffffff);
 
-			Assert.Equal(0, l.Count);
-		}
+            Assert.Equal(0, l.Count);
+        }
 
-		[Fact]
-		public static void SomeDropped()
-		{
-			var l = SetupLogic();
-			var h = SetupHeader(3, 0x2);
+        [Fact]
+        public static void SomeDropped()
+        {
+            var l = SetupLogic();
+            var h = SetupHeader(3, 0x2);
 
-			l.ReceivedByRemote(h);
+            l.ReceivedByRemote(h);
 
-			Assert.Equal(4, l.Count);
-			Assert.False(l.Dequeue().WasDelivered);
-			var info = l.Dequeue();
-			Assert.True(info.WasDelivered);
-			Assert.Equal(1u, info.PacketSequenceId.Value);
-			Assert.False(l.Dequeue().WasDelivered);
-			var info2 = l.Dequeue();
-			Assert.False(info2.WasDelivered);
-			Assert.Equal(3u, info2.PacketSequenceId.Value);
-		}
-	}
+            Assert.Equal(4, l.Count);
+            Assert.False(l.Dequeue().WasDelivered);
+            var info = l.Dequeue();
+            Assert.True(info.WasDelivered);
+            Assert.Equal(1u, info.PacketSequenceId.Value);
+            Assert.False(l.Dequeue().WasDelivered);
+            var info2 = l.Dequeue();
+            Assert.False(info2.WasDelivered);
+            Assert.Equal(3u, info2.PacketSequenceId.Value);
+        }
+    }
 }

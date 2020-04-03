@@ -27,20 +27,20 @@ using System;
 
 namespace Piot.Tend.Client
 {
-	public class UnorderedPacketException : Exception
-	{
-		public UnorderedPacketException()
-		{
-		}
+    public class UnorderedPacketException : Exception
+    {
+        public UnorderedPacketException()
+        {
+        }
 
-		public UnorderedPacketException(string message, SequenceId last, SequenceId received)
-			: base($"last: {last} received:{received} msg:{message}")
-		{
-		}
+        public UnorderedPacketException(string message, SequenceId last, SequenceId received)
+            : base($"last: {last} received:{received} msg:{message}")
+        {
+        }
 
-		public UnorderedPacketException(string message, Exception inner)
-			: base(message, inner)
-		{
-		}
-	}
+        public UnorderedPacketException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
 }
