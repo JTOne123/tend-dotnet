@@ -27,7 +27,7 @@ using System;
 
 namespace Piot.Tend.Client
 {
-    public class MutableReceiveMask
+    public struct MutableReceiveMask
     {
         uint mask;
         int validBitCount;

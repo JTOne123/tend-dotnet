@@ -30,7 +30,7 @@ namespace Piot.Tend.Client
     /// <summary>
     /// Represents an auto incrementing sequence identifier. Usually a value between 0 and 127 (7 bits). After 127 it wraps around to 0.
     /// </summary>
-    public class SequenceId
+    public struct SequenceId
     {
         const byte maxRange = 128;
         public const byte MaxValue = 127;

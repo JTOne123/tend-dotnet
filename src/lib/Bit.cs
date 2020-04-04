@@ -25,7 +25,7 @@ SOFTWARE.
 */
 namespace Piot.Tend.Client
 {
-    public class Bit
+    public struct Bit
     {
         bool on;
 

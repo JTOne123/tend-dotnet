@@ -28,7 +28,7 @@ using System;
 namespace Piot.Tend.Client
 {
 
-    public class ReceiveMask
+    public struct ReceiveMask
     {
         public const int Range = 32;
 

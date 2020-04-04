@@ -25,7 +25,7 @@ SOFTWARE.
 */
 namespace Piot.Tend.Client
 {
-    public class Header
+    public struct Header
     {
         public Header(SequenceId sequenceId, ReceiveMask receiveMask)
         {
