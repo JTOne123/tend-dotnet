@@ -3,7 +3,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <BaseDirectory>..\..\..\lib</BaseDirectory>
         <PackageId>Tend</PackageId>
-        <Version>1.0.8</Version>
+        <Version>1.0.9</Version>
         <Authors>Piot</Authors>
         <Description>Reliable Datagram Protocol</Description>
         <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
