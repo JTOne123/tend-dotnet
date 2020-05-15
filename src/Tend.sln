@@ -1,9 +1,9 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piot.Tend", "TendLib\Piot.Tend.csproj", "{872C4950-2AFB-488B-83AF-04E3855C7FDC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TendLib", "lib\TendLib.csproj", "{872C4950-2AFB-488B-83AF-04E3855C7FDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{B76828DC-65D7-426D-8334-BF5DD4EDB365}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "tests\Tests.csproj", "{B76828DC-65D7-426D-8334-BF5DD4EDB365}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
